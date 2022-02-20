@@ -44,5 +44,14 @@ namespace UnitTest1
 			Assert::AreEqual(height, *retHeight);
 			Assert::AreEqual(testData[0][2], (&retDataPtr)[0][2]);
 		}
+
+		TEST_METHOD(TestNextPosition)
+		{
+			int* xPos = new int(-1);
+			int* yPos = new int(-1);
+			GetNextPosition(*xPos, *yPos);
+			Assert::AreNotEqual(*xPos, -1);
+			Assert::AreNotEqual(*yPos, -1);
+		}
 	};
 }
