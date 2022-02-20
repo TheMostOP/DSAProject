@@ -15,6 +15,12 @@ DLLDSAPROJECT_API int fnDLLDSAProject(void)
     return 0;
 }
 
+char* GetTeam()
+{
+    char teamMembers[] = "Connor Reif and Luke Sullivan";
+    return teamMembers;
+}
+
 // This is the constructor of a class that has been exported.
 CDLLDSAProject::CDLLDSAProject()
 {
