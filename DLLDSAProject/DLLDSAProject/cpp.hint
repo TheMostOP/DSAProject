@@ -1,0 +1,2 @@
+#define DLLDSAPROJECT_API __declspec(dllexport)
+#define DLLDSAPROJECT_API __declspec(dllimport)
