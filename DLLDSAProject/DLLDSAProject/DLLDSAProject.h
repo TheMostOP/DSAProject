@@ -20,3 +20,4 @@ public:
 extern DLLDSAPROJECT_API int nDLLDSAProject;
 
 DLLDSAPROJECT_API int fnDLLDSAProject(void);
+DLLDSAPROJECT_API char* GetTeam();

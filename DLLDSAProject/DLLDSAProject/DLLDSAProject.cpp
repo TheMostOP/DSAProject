@@ -20,3 +20,10 @@ CDLLDSAProject::CDLLDSAProject()
 {
     return;
 }
+
+// Connor's functions
+const char* teamName = "Luke and Connor";
+DLLDSAPROJECT_API char* GetTeam()
+{
+    return (char*)teamName;
+}
