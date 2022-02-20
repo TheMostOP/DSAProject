@@ -73,6 +73,18 @@ DLLDSAPROJECT_API void GetStart(int& xpos, int& ypos)
     ypos = startPos[1];
 }
 
+int endPos[] = { -1,-1 };
+DLLDSAPROJECT_API void SetEnd(int xpos, int ypos)
+{
+    endPos[0] = xpos;
+    endPos[1] = ypos;
+}
+
+DLLDSAPROJECT_API void GetEnd(int& xpos, int& ypos)
+{
+    xpos = endPos[0];
+    ypos = endPos[1];
+}
 
 // This is the constructor of a class that has been exported.
 CDLLDSAProject::CDLLDSAProject()
