@@ -22,9 +22,9 @@ DLLDSAPROJECT_API char* GetTeam()
     return (char*)teamName;
 }
 
-int** mazeData = nullptr;
+const int** mazeData = nullptr;
 int mazeWidth, mazeHeight = 0;
-DLLDSAPROJECT_API void SetMaze(int** data, int width, int height)
+DLLDSAPROJECT_API void SetMaze(const int** data, int width, int height)
 {
     mazeData = data;
     mazeWidth = width;
@@ -35,7 +35,7 @@ DLLDSAPROJECT_API int** GetMaze(int& width, int& height)
 {
     width = mazeWidth;
     height = mazeHeight;
-    return mazeData;
+    return (int**)mazeData;
 }
 
 int positions[10][2] =
