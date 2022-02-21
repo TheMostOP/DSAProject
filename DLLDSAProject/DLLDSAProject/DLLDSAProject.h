@@ -20,3 +20,11 @@ public:
 extern DLLDSAPROJECT_API int nDLLDSAProject;
 
 DLLDSAPROJECT_API int fnDLLDSAProject(void);
+DLLDSAPROJECT_API char* GetTeam();
+DLLDSAPROJECT_API void SetMaze(int** data, int width, int height);
+DLLDSAPROJECT_API int** GetMaze(int& width, int& height);
+DLLDSAPROJECT_API void GetNextPosition(int& xPos, int& yPos);
+DLLDSAPROJECT_API void SetStart(int xpos, int ypos);
+DLLDSAPROJECT_API void GetStart(int& xpos, int& ypos);
+DLLDSAPROJECT_API void SetEnd(int xpos, int ypos);
+DLLDSAPROJECT_API void GetEnd(int& xpos, int& ypos);
