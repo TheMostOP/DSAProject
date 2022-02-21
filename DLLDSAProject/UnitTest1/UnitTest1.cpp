@@ -53,5 +53,23 @@ namespace UnitTest1
 			Assert::AreNotEqual(*xPos, -1);
 			Assert::AreNotEqual(*yPos, -1);
 		}
+
+		TEST_METHOD(TestEndPosFuncs)
+		{
+			int endPos[] = { -1,-1 };
+			int endPosPtr = *endPos;
+			int* xPos = new int(4);
+			int* yPos = new int(1);
+			SetEnd(*xPos, *yPos);
+
+			int* retXPos = new int();
+			int* retYPos = new int();
+			GetEnd(*retXPos, *retYPos);
+
+			Assert::AreNotEqual(*xPos, -1);
+			Assert::AreNotEqual(*yPos, -1);
+			Assert::AreEqual(*xPos, *retXPos);
+			Assert::AreEqual(*yPos, *retYPos);
+		}
 	};
 }
