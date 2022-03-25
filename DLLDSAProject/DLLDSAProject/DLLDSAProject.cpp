@@ -43,9 +43,17 @@ DLLDSAPROJECT_API bool SetMaze(const int** data, int width, int height)
 
 DLLDSAPROJECT_API int** GetMaze(int& width, int& height)
 {
-    width = mazeWidth;
-    height = mazeHeight;
-    return (int**)mazeData;
+    //If the mazeData hasn't been set and is still nullptr, return nullptr
+    if (mazeData == nullptr)
+    {
+        return nullptr;
+    }
+    else 
+    {
+        width = mazeWidth;
+        height = mazeHeight;
+        return (int**)mazeData;
+    }
 }
 
 int positions[10][2] =
