@@ -33,7 +33,7 @@ namespace UnitTest1
 				{ 91, 92, 93, 94, 95 },
 				{ 01, 02, 03, 04, 05 }
 			};
-			int* testDataPtr = *testData;
+			const int* testDataPtr = *testData;
 			SetMaze(&testDataPtr, width, height);
 
 			int* retWidth = new int();
