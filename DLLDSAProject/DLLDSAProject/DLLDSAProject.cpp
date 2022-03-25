@@ -24,11 +24,21 @@ DLLDSAPROJECT_API char* GetTeam()
 
 const int** mazeData = nullptr;
 int mazeWidth, mazeHeight = 0;
-DLLDSAPROJECT_API void SetMaze(const int** data, int width, int height)
+DLLDSAPROJECT_API bool SetMaze(const int** data, int width, int height)
 {
-    mazeData = data;
-    mazeWidth = width;
-    mazeHeight = height;
+    //if the data is not a nullptr and the width and height are both greater than zero, set the maze and return true
+    if (data != nullptr && width > 0 && height > 0)
+    {
+        mazeData = data;
+        mazeWidth = width;
+        mazeHeight = height;
+        return true;
+    }
+    //if the data is a nullptr or width or height are null, negative, or zero, return false
+    else
+    {
+        return false;
+    }
 }
 
 DLLDSAPROJECT_API int** GetMaze(int& width, int& height)
