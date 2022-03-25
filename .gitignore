@@ -32,4 +32,6 @@
 *.app
 
 *.opendb
-DLLDSAProject/.vs/DLLDSAProject/v16/TestStore/0/000.testlog
+*.testlog
+*.tlog
+
