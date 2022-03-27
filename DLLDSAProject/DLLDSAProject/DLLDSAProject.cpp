@@ -156,6 +156,25 @@ DLLDSAPROJECT_API bool GetEnd(int& xpos, int& ypos)
 	}
 }
 
+/// <summary>
+///  this function will make the player start back at their start location and step through each part of the path to the end again.
+/// </summary>
+/// <returns></returns>
+DLLDSAPROJECT_API bool Restart(int xPos, int yPos) 
+{
+	//set currentPosIndex back to -1
+	currentPosIndex = -1;
+	//set the given x and y positions to Start (if GetStart returns false, stop and return false
+	if (!GetStart(xPos, yPos))
+	{
+		return false;
+	}
+	//call GetNextPosition until it returns false
+	while (GetNextPosition(xPos, yPos)){}
+	//If you made it this far return true
+	return true;
+}
+
 // This is the constructor of a class that has been exported.
 CDLLDSAProject::CDLLDSAProject()
 {
