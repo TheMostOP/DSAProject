@@ -107,10 +107,20 @@ DLLDSAPROJECT_API bool SetStart(int xpos, int ypos)
 	}
 }
 
-DLLDSAPROJECT_API void GetStart(int& xpos, int& ypos)
+DLLDSAPROJECT_API bool GetStart(int& xpos, int& ypos)
 {
-	xpos = startPos[0];
-	ypos = startPos[1];
+	//If the starting x and y positions have been set as valid values, set the given positions to match and return true.
+	if (startPos[0] >= 0 && startPos[1] >= 0)
+	{
+		xpos = startPos[0];
+		ypos = startPos[1];
+		return true;
+	}
+	//Otherwise, return false and do not set the given positions to anything.
+	else
+	{
+		return false;
+	}
 }
 
 int endPos[] = { -1,-1 };
