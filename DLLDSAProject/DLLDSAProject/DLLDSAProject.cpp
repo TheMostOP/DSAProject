@@ -7,106 +7,118 @@
 
 
 // This is an example of an exported variable
-DLLDSAPROJECT_API int nDLLDSAProject=0;
+DLLDSAPROJECT_API int nDLLDSAProject = 0;
 
 // This is an example of an exported function.
 DLLDSAPROJECT_API int fnDLLDSAProject(void)
 {
-    return 0;
+	return 0;
 }
 
 // Connor's functions
 const char* teamName = "Luke and Connor";
 DLLDSAPROJECT_API char* GetTeam()
 {
-    return (char*)teamName;
+	return (char*)teamName;
 }
 
 const int** mazeData = nullptr;
 int mazeWidth, mazeHeight = 0;
 DLLDSAPROJECT_API bool SetMaze(const int** data, int width, int height)
 {
-    //if the data is not a nullptr and the width and height are both greater than zero, set the maze and return true
-    if (data != nullptr && width > 0 && height > 0)
-    {
-        mazeData = data;
-        mazeWidth = width;
-        mazeHeight = height;
-        return true;
-    }
-    //if the data is a nullptr or width or height are null, negative, or zero, return false
-    else
-    {
-        return false;
-    }
+	//if the data is not a nullptr and the width and height are both greater than zero, set the maze and return true
+	if (data != nullptr && width > 0 && height > 0)
+	{
+		mazeData = data;
+		mazeWidth = width;
+		mazeHeight = height;
+		return true;
+	}
+	//if the data is a nullptr or width or height are null, negative, or zero, return false
+	else
+	{
+		return false;
+	}
 }
 
 DLLDSAPROJECT_API int** GetMaze(int& width, int& height)
 {
-    //If the mazeData hasn't been set and is still nullptr, return nullptr
-    if (mazeData == nullptr)
-    {
-        return nullptr;
-    }
-    else 
-    {
-        width = mazeWidth;
-        height = mazeHeight;
-        return (int**)mazeData;
-    }
+	//If the mazeData hasn't been set and is still nullptr, return nullptr
+	if (mazeData == nullptr)
+	{
+		return nullptr;
+	}
+	else
+	{
+		width = mazeWidth;
+		height = mazeHeight;
+		return (int**)mazeData;
+	}
 }
 
 int positions[10][2] =
 {
-    { 1, 5 },
-    { 3, 2 },
-    { 7, 3 },
-    { 6, 9 },
-    { 2, 5 },
-    { 4, 1 },
-    { 3, 3 },
-    { 7, 8 },
-    { 8, 4 },
-    { 1, 6 }
+	{ 1, 5 },
+	{ 3, 2 },
+	{ 7, 3 },
+	{ 6, 9 },
+	{ 2, 5 },
+	{ 4, 1 },
+	{ 3, 3 },
+	{ 7, 8 },
+	{ 8, 4 },
+	{ 1, 6 }
 };
 int currentPosIndex = -1;
-DLLDSAPROJECT_API void GetNextPosition(int& xPos, int& yPos)
+DLLDSAPROJECT_API bool GetNextPosition(int& xPos, int& yPos)
 {
-    currentPosIndex++;
-    xPos = positions[currentPosIndex][0];
-    yPos = positions[currentPosIndex][1];
+	//If the current position is one away from the size of the positions array (or any amount greater) then there are no more steps to take.
+	//The function will in that case return false
+	if (currentPosIndex + 1 >= sizeof(positions))
+	{
+		return false;
+	}
+	//Otherwise, increase the current position index by one, set the x and y positions to the next position in the array and return true.
+	else 
+	{
+		currentPosIndex++;
+		xPos = positions[currentPosIndex][0];
+		yPos = positions[currentPosIndex][1];
+		return true;
+	}
+
 }
 
 //Luke's Functions
-int startPos[] = {-1,-1};
+int startPos[] = { -1,-1 };
 DLLDSAPROJECT_API void SetStart(int xpos, int ypos)
 {
-    startPos[0] = xpos;
-    startPos[1] = ypos;
+	startPos[0] = xpos;
+	startPos[1] = ypos;
 }
 
 DLLDSAPROJECT_API void GetStart(int& xpos, int& ypos)
 {
-    xpos = startPos[0];
-    ypos = startPos[1];
+	xpos = startPos[0];
+	ypos = startPos[1];
 }
 
 int endPos[] = { -1,-1 };
 DLLDSAPROJECT_API void SetEnd(int xpos, int ypos)
 {
-    endPos[0] = xpos;
-    endPos[1] = ypos;
+	endPos[0] = xpos;
+	endPos[1] = ypos;
 }
 
 DLLDSAPROJECT_API void GetEnd(int& xpos, int& ypos)
 {
-    xpos = endPos[0];
-    ypos = endPos[1];
+	xpos = endPos[0];
+	ypos = endPos[1];
 }
 
 // This is the constructor of a class that has been exported.
 CDLLDSAProject::CDLLDSAProject()
 {
-    return;
+	return;
 }
 
