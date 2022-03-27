@@ -79,7 +79,7 @@ DLLDSAPROJECT_API bool GetNextPosition(int& xPos, int& yPos)
 		return false;
 	}
 	//Otherwise, increase the current position index by one, set the x and y positions to the next position in the array and return true.
-	else 
+	else
 	{
 		currentPosIndex++;
 		xPos = positions[currentPosIndex][0];
@@ -91,10 +91,20 @@ DLLDSAPROJECT_API bool GetNextPosition(int& xPos, int& yPos)
 
 //Luke's Functions
 int startPos[] = { -1,-1 };
-DLLDSAPROJECT_API void SetStart(int xpos, int ypos)
+DLLDSAPROJECT_API bool SetStart(int xpos, int ypos)
 {
-	startPos[0] = xpos;
-	startPos[1] = ypos;
+	//Check if the given values are valid. If so, set the new start position and return true.
+	if (xpos >= 0 && ypos >= 0)
+	{
+		startPos[0] = xpos;
+		startPos[1] = ypos;
+		return true;
+	}
+	//Otherwise, return false.
+	else
+	{
+		return false;
+	}
 }
 
 DLLDSAPROJECT_API void GetStart(int& xpos, int& ypos)
