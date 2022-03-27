@@ -124,16 +124,36 @@ DLLDSAPROJECT_API bool GetStart(int& xpos, int& ypos)
 }
 
 int endPos[] = { -1,-1 };
-DLLDSAPROJECT_API void SetEnd(int xpos, int ypos)
+DLLDSAPROJECT_API bool SetEnd(int xpos, int ypos)
 {
-	endPos[0] = xpos;
-	endPos[1] = ypos;
+	//Check if the given values are valid. If so, set the new end position and return true.
+	if (xpos >= 0 && ypos >= 0)
+	{
+		endPos[0] = xpos;
+		endPos[1] = ypos;
+		return true;
+	}
+	//Otherwise, return false.
+	else
+	{
+		return false;
+	}
 }
 
-DLLDSAPROJECT_API void GetEnd(int& xpos, int& ypos)
+DLLDSAPROJECT_API bool GetEnd(int& xpos, int& ypos)
 {
-	xpos = endPos[0];
-	ypos = endPos[1];
+	//If the starting x and y positions have been set as valid values, set the given positions to match and return true.
+	if (startPos[0] >= 0 && startPos[1] >= 0)
+	{
+		xpos = endPos[0];
+		ypos = endPos[1];
+		return true;
+	}
+	//Otherwise, return false and do not set the given positions to anything.
+	else
+	{
+		return false;
+	}
 }
 
 // This is the constructor of a class that has been exported.
