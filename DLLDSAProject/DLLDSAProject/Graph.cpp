@@ -5,18 +5,20 @@
 void Graph::Evaluate(Vertex* vertex, int& adjVertexCount)
 {
 	// Calculate heuristic (distance from end)
-	vertex->heuristic = abs(vertex->xPos - end->xPos) + abs(vertex->yPos - end->yPos);
+	vertex->heuristic = CalcHeuristic(vertex);
 	
 	// Remove this vertex from the available list
 	bool found = false;
 	for (int i = 0; i < adjVertexCount; i++) {
 		// If they're at the same address
-		if (&adjacentVertices[i] == vertex) {
+		if (adjacentVertices[i] == vertex) {
 			found = true;
+			adjacentVertices[i] = nullptr;
 		}
 		// After we found it, we have to slide the following vertices back one to keep the array clean
 		else if (found) {
 			adjacentVertices[i - 1] = adjacentVertices[i];
+			adjacentVertices[i] = nullptr;
 		}
 	}
 	// Adjust the count of the available list
@@ -24,7 +26,7 @@ void Graph::Evaluate(Vertex* vertex, int& adjVertexCount)
 	
 	// Add available vertices
 	// Calculate the lowestCost to adjacent vertices from this vertex
-	int adjacentCost = vertex->lowestCost + 10;
+	int adjacentCost = vertex->lowestCost + 1;
 	// If the vertex is NOT on the edge
 	if (vertex->xPos < width - 1) { // right
 		// We know there's a vertex in this direction
@@ -42,8 +44,9 @@ void Graph::Evaluate(Vertex* vertex, int& adjVertexCount)
 			
 			// If it's not already part of the available list
 			if (!right.discovered) {
-				adjacentVertices[adjVertexCount] = right;
-				(adjVertexCount)++;
+				adjacentVertices[adjVertexCount] = &right;
+				adjVertexCount++;
+				right.heuristic = CalcHeuristic(&right);
 				right.discovered = true;
 			}
 		}
@@ -58,8 +61,9 @@ void Graph::Evaluate(Vertex* vertex, int& adjVertexCount)
 			}
 
 			if (!left.discovered) {
-				adjacentVertices[adjVertexCount] = left;
-				(adjVertexCount)++;
+				adjacentVertices[adjVertexCount] = &left;
+				adjVertexCount++;
+				left.heuristic = CalcHeuristic(&left);
 				left.discovered = true;
 			}
 		}
@@ -73,8 +77,9 @@ void Graph::Evaluate(Vertex* vertex, int& adjVertexCount)
 			}
 
 			if (!up.discovered) {
-				adjacentVertices[adjVertexCount] = up;
-				(adjVertexCount)++;
+				adjacentVertices[adjVertexCount] = &up;
+				adjVertexCount++;
+				up.heuristic = CalcHeuristic(&up);
 				up.discovered = true;
 			}
 		}
@@ -88,12 +93,18 @@ void Graph::Evaluate(Vertex* vertex, int& adjVertexCount)
 			}
 
 			if (!down.discovered) {
-				adjacentVertices[adjVertexCount] = down;
-				(adjVertexCount)++;
+				adjacentVertices[adjVertexCount] = &down;
+				adjVertexCount++;
+				down.heuristic = CalcHeuristic(&down);
 				down.discovered = true;
 			}
 		}
 	}
+}
+
+int Graph::CalcHeuristic(Vertex* vertex)
+{
+	return abs(vertex->xPos - end->xPos) + abs(vertex->yPos - end->yPos);
 }
 
 Graph::Graph(const int** mazeData, int width, int height, int startX, int startY, int endX, int endY)
@@ -122,8 +133,8 @@ Graph::Graph(const int** mazeData, int width, int height, int startX, int startY
 	this->width = width;
 	this->height = height;
 
-	// Allocate the available vertices array
-	adjacentVertices = new Vertex[width * height];
+	// We allocate the memory when we need it (in FindPath)
+	adjacentVertices = nullptr;
 
 	// Save the start and end vertices ONLY IF they are valid
 	if (startX >= 0 && startX < width && startY >= 0 && startY < height) {
@@ -186,6 +197,10 @@ bool Graph::GetEnd(int& x, int& y)
 
 int** Graph::FindPath(int& pathLength)
 {
+	// If start OR end isn't set, we have nothing to give
+	if (start == nullptr || end == nullptr)
+		return nullptr;
+
 	// Path
 	int** path = new int*[width * height];
 	for (int i = 0; i < width * height; i++)
@@ -193,71 +208,39 @@ int** Graph::FindPath(int& pathLength)
 		path[i] = new int[2];
 	}
 
-	// Visited vertices
-	Vertex* evaluatedVertices = new Vertex[width * height];
-	// current evaluated vertex count
-	int evalVertexCount = 0;
-
 	// Start the pathfinding at start
-	adjacentVertices[0] = *start;
+	Vertex* currentVertex = start;
+	adjacentVertices = new Vertex*[width * height];
+	adjacentVertices[0] = start;
 	int adjVertexCount = 1;
+	start->heuristic = CalcHeuristic(start);
 	start->lowestCost = 0;
 	start->discovered = true;
-	Vertex* currentVertex = start;
 	
 	// Loop until the path has the end in it OR there are no more vertices to evaluate
 	while (currentVertex != end || adjVertexCount == 0) {
 
 		// Look through available vertices
-		currentVertex = &adjacentVertices[0]; // start with the first vertex in the adjacent vertices
+		currentVertex = adjacentVertices[0]; // start with the first vertex in the adjacent vertices
 		for (int i = 1; i < adjVertexCount; i++) {
 
 			// If its combined score is less than or equal to the previously lowest combined cost
-			if (adjacentVertices[i].heuristic + adjacentVertices[i].lowestCost <= currentVertex->heuristic + currentVertex->lowestCost) {
+			if (adjacentVertices[i]->heuristic + adjacentVertices[i]->lowestCost <= currentVertex->heuristic + currentVertex->lowestCost) {
 
-				// If the combined scores are the same AND it has a lesser heuristc score
-				if (adjacentVertices[i].heuristic + adjacentVertices[i].lowestCost == currentVertex->heuristic + currentVertex->lowestCost &&
-					adjacentVertices[i].heuristic < currentVertex->heuristic) {
-					currentVertex = &adjacentVertices[i]; // make this the next vertex to evaluate (at least until we find a better one)
+				// If the combined scores are the same AND it has a lesser heuristic score
+				if (adjacentVertices[i]->heuristic + adjacentVertices[i]->lowestCost == currentVertex->heuristic + currentVertex->lowestCost &&
+					adjacentVertices[i]->heuristic < currentVertex->heuristic) {
+					currentVertex = adjacentVertices[i]; // make this the next vertex to evaluate (at least until we find a better one)
 				}
 			}
 		}
 
 		// Evaluate the selected vertex
-		int* temp = &adjVertexCount;
-		Evaluate(currentVertex, *temp);
+		Evaluate(currentVertex, adjVertexCount);
 	}
 
-	// If we found the end
-	if (currentVertex == end) {
-		// Trace the path thru the vertex parents
-		int** reversePath = new int* [width * height];
-		for (int i = 0; i < width * height; i++)
-		{
-			reversePath[i] = new int[2];
-		}
-
-		int lengthCount = 0;
-		while (currentVertex->parent != nullptr) {
-			reversePath[lengthCount][0] = currentVertex->xPos;
-			reversePath[lengthCount][1] = currentVertex->yPos;
-			lengthCount++;
-			currentVertex = currentVertex->parent;
-		}
-
-		// Copy the positions into the path in the correct (not-reversed) order
-		for (int i = 0; i < lengthCount; i++) {
-			path[i] = reversePath[lengthCount - i - 1];
-		}
-
-		// Set the path length
-		pathLength = lengthCount;
-
-		// Release the necessary memory
-		delete[] reversePath;
-	}
 	// If we made it to this point and we haven't found the end, there's no way to get to the end
-	else {
+	if (currentVertex != end) {
 		Vertex lowestCost = matrix[0][0];
 
 		// Loop thru the vertices
@@ -267,38 +250,41 @@ int** Graph::FindPath(int& pathLength)
 				if (matrix[i][j].xPos != -1 && matrix[i][j].discovered) {
 					// If it has a lower combined cost
 					if (matrix[i][j].lowestCost + matrix[i][j].heuristic < lowestCost.lowestCost + lowestCost.heuristic) {
+						// It only sets it if it's lower, so if there's one that's just as good
+						// then it's gonna ignore it and keep the one it already has
 						lowestCost = matrix[i][j];
 					}
 				}
 			}
 		}
-
-		// After we found the best destination, we can retrace it's steps
-		int** reversePath = new int* [width * height];
-		for (int i = 0; i < width * height; i++)
-		{
-			reversePath[i] = new int[2];
-		}
-
-		int lengthCount = 0;
-		while (currentVertex->parent != nullptr) {
-			reversePath[lengthCount][0] = currentVertex->xPos;
-			reversePath[lengthCount][1] = currentVertex->yPos;
-			lengthCount++;
-			currentVertex = currentVertex->parent;
-		}
-
-		// Copy the positions into the path in the correct (not-reversed) order
-		for (int i = 0; i < lengthCount; i++) {
-			path[i] = reversePath[lengthCount - i - 1];
-		}
-
-		// Set the path length
-		pathLength = lengthCount;
-
-		// Release the necessary memory
-		delete[] reversePath;
 	}
+
+	// After we found the best destination, we can retrace it's steps
+	int** reversePath = new int* [width * height];
+	for (int i = 0; i < width * height; i++)
+	{
+		reversePath[i] = new int[2];
+	}
+
+	// Retrace it's steps by the parent pointer
+	int lengthCount = 0;
+	for (; currentVertex->parent != nullptr; lengthCount++) {
+		reversePath[lengthCount][0] = currentVertex->xPos;
+		reversePath[lengthCount][1] = currentVertex->yPos;
+		currentVertex = currentVertex->parent;
+		// If the parent pointer is nullptr then we're back at the start
+	}
+
+	// Copy the positions into the path in the correct (not-reversed) order
+	for (int i = 0; i < lengthCount; i++) {
+		path[i] = reversePath[lengthCount - i - 1];
+	}
+
+	// Set the path length
+	pathLength = lengthCount;
+
+	// Release the necessary memory
+	delete[] reversePath;
 
 	return path;
 }

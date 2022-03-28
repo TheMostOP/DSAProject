@@ -9,7 +9,7 @@
 Graph* graph = nullptr;
 int** path = nullptr;
 int currentPathIndex;
-int* pathLength;
+int* pathLength = new int();
 const int** mazeData = nullptr;
 int mazeWidth, mazeHeight = 0;
 
