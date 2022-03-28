@@ -30,3 +30,4 @@ DLLDSAPROJECT_API bool GetStart(int& xpos, int& ypos);
 DLLDSAPROJECT_API bool SetEnd(int xpos, int ypos);
 DLLDSAPROJECT_API bool GetEnd(int& xpos, int& ypos);
 DLLDSAPROJECT_API bool Restart(int xPos, int yPos);
+
