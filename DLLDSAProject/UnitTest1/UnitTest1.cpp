@@ -9,7 +9,6 @@ namespace UnitTest1
 	TEST_CLASS(UnitTest1)
 	{
 	public:
-		
 		TEST_METHOD(TestTeamNames)
 		{
 			char* test = "Just Connor";
@@ -21,18 +20,19 @@ namespace UnitTest1
 		{
 			const int width = 10;
 			const int height = 5;
-			int testData[width][height] = {
-				{ 11, 12, 13, 14, 15 },
-				{ 21, 22, 23, 24, 25 },
-				{ 31, 32, 33, 34, 35 },
-				{ 41, 42, 43, 44, 45 },
-				{ 51, 52, 53, 54, 55 },
-				{ 61, 62, 63, 64, 65 },
-				{ 71, 72, 73, 74, 75 },
-				{ 81, 82, 83, 84, 85 },
-				{ 91, 92, 93, 94, 95 },
-				{ 01, 02, 03, 04, 05 }
+			const int testData[width][height] = {
+				{ 0, 1, 0, 0, 0 },
+				{ 0, 1, 0, 0, 0 },
+				{ 0, 1, 1, 1, 0 },
+				{ 0, 1, 0, 1, 0 },
+				{ 0, 1, 0, 1, 0 },
+				{ 0, 0, 0, 1, 0 },
+				{ 0, 0, 1, 1, 0 },
+				{ 0, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 0 },
+				{ 0, 0, 0, 0, 0 }
 			};
+
 			const int* testDataPtr = *testData;
 			SetMaze(&testDataPtr, width, height);
 
@@ -47,11 +47,32 @@ namespace UnitTest1
 
 		TEST_METHOD(TestNextPosition)
 		{
-			int* xPos = new int(-1);
-			int* yPos = new int(-1);
-			GetNextPosition(*xPos, *yPos);
-			Assert::AreNotEqual(*xPos, -1);
-			Assert::AreNotEqual(*yPos, -1);
+			int width = 10;
+			int height = 5;
+			int** testData = new int*[width];
+			for (int i = 0; i < width; i++) {
+				testData[i] = new int[height];
+			}
+			//{ 0, 1, 0, 0, 0 }
+			//{ 0, 1, 0, 0, 0 }
+			//{ 0, 1, 1, 1, 0 }
+			//{ 0, 1, 0, 1, 0 }
+			//{ 0, 1, 0, 1, 0 }
+			//{ 0, 0, 0, 1, 0 }
+			//{ 0, 0, 1, 1, 0 }
+			//{ 0, 0, 0, 0, 0 }
+			//{ 0, 0, 0, 0, 0 }
+			//{ 0, 0, 0, 0, 0 }
+
+			int xPos, yPos;
+			SetMaze(testData, width, height);
+			SetStart(1, 0);
+			SetEnd(1, 2);
+			GetStart(xPos, yPos);
+			
+			GetNextPosition(xPos, yPos);
+			Assert::AreEqual(xPos, 0);
+			Assert::AreEqual(yPos, 2);
 		}
 
 		TEST_METHOD(TestEndPosFuncs)

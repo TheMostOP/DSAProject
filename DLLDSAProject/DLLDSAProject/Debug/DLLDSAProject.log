@@ -1,5 +1,8 @@
-﻿  Graph.cpp
+﻿  pch.cpp
+  DLLDSAProject.cpp
+  dllmain.cpp
+  Graph.cpp
   Vertex.cpp
   Generating Code...
-     Creating library C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\SampleDLL.lib and object C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\SampleDLL.exp
-  DLLDSAProject.vcxproj -> C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\SampleDLL.dll
+     Creating library C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\DLLDSAProject.lib and object C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\DLLDSAProject.exp
+  DLLDSAProject.vcxproj -> C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\DLLDSAProject.dll
