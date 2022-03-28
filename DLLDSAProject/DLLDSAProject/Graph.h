@@ -10,7 +10,7 @@ class Graph
 	Vertex* start;
 	Vertex* end;
 
-	void Evaluate(Vertex* vertex, int* adjVertexCount);
+	void Evaluate(Vertex* vertex, int& adjVertexCount);
 
 public:
 	Graph(const int** mazeData, int width, int height, int startX, int startY, int endX, int endY);

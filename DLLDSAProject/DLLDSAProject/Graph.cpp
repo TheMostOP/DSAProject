@@ -2,14 +2,14 @@
 #include "Graph.h"
 #include <cmath>
 
-void Graph::Evaluate(Vertex* vertex, int* adjVertexCount)
+void Graph::Evaluate(Vertex* vertex, int& adjVertexCount)
 {
 	// Calculate heuristic (distance from end)
-	vertex->heuristic = (int)abs((float)(vertex->xPos - end->xPos)) + (int)abs((float)(vertex->yPos - end->yPos));
+	vertex->heuristic = abs(vertex->xPos - end->xPos) + abs(vertex->yPos - end->yPos);
 	
 	// Remove this vertex from the available list
 	bool found = false;
-	for (int i = 0; i < *adjVertexCount; i++) {
+	for (int i = 0; i < adjVertexCount; i++) {
 		// If they're at the same address
 		if (&adjacentVertices[i] == vertex) {
 			found = true;
@@ -42,8 +42,8 @@ void Graph::Evaluate(Vertex* vertex, int* adjVertexCount)
 			
 			// If it's not already part of the available list
 			if (!right.discovered) {
-				adjacentVertices[*adjVertexCount] = right;
-				(*adjVertexCount)++;
+				adjacentVertices[adjVertexCount] = right;
+				(adjVertexCount)++;
 				right.discovered = true;
 			}
 		}
@@ -58,8 +58,8 @@ void Graph::Evaluate(Vertex* vertex, int* adjVertexCount)
 			}
 
 			if (!left.discovered) {
-				adjacentVertices[*adjVertexCount] = left;
-				(*adjVertexCount)++;
+				adjacentVertices[adjVertexCount] = left;
+				(adjVertexCount)++;
 				left.discovered = true;
 			}
 		}
@@ -73,8 +73,8 @@ void Graph::Evaluate(Vertex* vertex, int* adjVertexCount)
 			}
 
 			if (!up.discovered) {
-				adjacentVertices[*adjVertexCount] = up;
-				(*adjVertexCount)++;
+				adjacentVertices[adjVertexCount] = up;
+				(adjVertexCount)++;
 				up.discovered = true;
 			}
 		}
@@ -88,8 +88,8 @@ void Graph::Evaluate(Vertex* vertex, int* adjVertexCount)
 			}
 
 			if (!down.discovered) {
-				adjacentVertices[*adjVertexCount] = down;
-				(*adjVertexCount)++;
+				adjacentVertices[adjVertexCount] = down;
+				(adjVertexCount)++;
 				down.discovered = true;
 			}
 		}
@@ -187,7 +187,11 @@ bool Graph::GetEnd(int& x, int& y)
 int** Graph::FindPath(int& pathLength)
 {
 	// Path
-	int** path = (int**)(new int[width * height][2]);
+	int** path = new int*[width * height];
+	for (int i = 0; i < width * height; i++)
+	{
+		path[i] = new int[2];
+	}
 
 	// Visited vertices
 	Vertex* evaluatedVertices = new Vertex[width * height];
@@ -198,6 +202,7 @@ int** Graph::FindPath(int& pathLength)
 	adjacentVertices[0] = *start;
 	int adjVertexCount = 1;
 	start->lowestCost = 0;
+	start->discovered = true;
 	Vertex* currentVertex = start;
 	
 	// Loop until the path has the end in it OR there are no more vertices to evaluate
@@ -219,13 +224,19 @@ int** Graph::FindPath(int& pathLength)
 		}
 
 		// Evaluate the selected vertex
-		Evaluate(currentVertex, &adjVertexCount);
+		int* temp = &adjVertexCount;
+		Evaluate(currentVertex, *temp);
 	}
 
 	// If we found the end
 	if (currentVertex == end) {
 		// Trace the path thru the vertex parents
-		int(*reversePath)[2] = new int[width * height][2];
+		int** reversePath = new int* [width * height];
+		for (int i = 0; i < width * height; i++)
+		{
+			reversePath[i] = new int[2];
+		}
+
 		int lengthCount = 0;
 		while (currentVertex->parent != nullptr) {
 			reversePath[lengthCount][0] = currentVertex->xPos;
@@ -263,7 +274,12 @@ int** Graph::FindPath(int& pathLength)
 		}
 
 		// After we found the best destination, we can retrace it's steps
-		int(*reversePath)[2] = new int[width * height][2];
+		int** reversePath = new int* [width * height];
+		for (int i = 0; i < width * height; i++)
+		{
+			reversePath[i] = new int[2];
+		}
+
 		int lengthCount = 0;
 		while (currentVertex->parent != nullptr) {
 			reversePath[lengthCount][0] = currentVertex->xPos;

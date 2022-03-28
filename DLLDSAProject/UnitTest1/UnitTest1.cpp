@@ -47,25 +47,23 @@ namespace UnitTest1
 
 		TEST_METHOD(TestNextPosition)
 		{
-			int width = 10;
-			int height = 5;
-			int** testData = new int*[width];
-			for (int i = 0; i < width; i++) {
-				testData[i] = new int[height];
-			}
-			//{ 0, 1, 0, 0, 0 }
-			//{ 0, 1, 0, 0, 0 }
-			//{ 0, 1, 1, 1, 0 }
-			//{ 0, 1, 0, 1, 0 }
-			//{ 0, 1, 0, 1, 0 }
-			//{ 0, 0, 0, 1, 0 }
-			//{ 0, 0, 1, 1, 0 }
-			//{ 0, 0, 0, 0, 0 }
-			//{ 0, 0, 0, 0, 0 }
-			//{ 0, 0, 0, 0, 0 }
+			const int width = 10;
+			const int height = 5;
 
+			const int** data = new const int* [width];
+			data[0] = new int[] { 0, 1, 0, 0, 0 };
+			data[1] = new int[] { 0, 1, 0, 0, 0 };
+			data[2] = new int[] { 0, 1, 1, 1, 0 };
+			data[3] = new int[] { 0, 1, 0, 1, 0 };
+			data[4] = new int[] { 0, 1, 0, 1, 0 };
+			data[5] = new int[] { 0, 0, 0, 1, 0 };
+			data[6] = new int[] { 0, 0, 1, 1, 0 };
+			data[7] = new int[] { 0, 0, 0, 0, 0 };
+			data[8] = new int[] { 0, 0, 0, 0, 0 };
+			data[9] = new int[] { 0, 0, 0, 0, 0 };
+			
 			int xPos, yPos;
-			SetMaze(testData, width, height);
+			SetMaze(data, width, height);
 			SetStart(1, 0);
 			SetEnd(1, 2);
 			GetStart(xPos, yPos);
