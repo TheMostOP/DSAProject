@@ -5,6 +5,13 @@
 #include "framework.h"
 #include "DLLDSAProject.h"
 
+// Fields
+Graph* graph = nullptr;
+int** path = nullptr;
+int currentPathIndex;
+int* pathLength;
+const int** mazeData = nullptr;
+int mazeWidth, mazeHeight = 0;
 
 // This is an example of an exported variable
 DLLDSAPROJECT_API int nDLLDSAProject = 0;
@@ -22,8 +29,6 @@ DLLDSAPROJECT_API char* GetTeam()
 	return (char*)teamName;
 }
 
-const int** mazeData = nullptr;
-int mazeWidth, mazeHeight = 0;
 DLLDSAPROJECT_API bool SetMaze(const int** data, int width, int height)
 {
 	//if the data is not a nullptr and the width and height are both greater than zero, set the maze and return true
@@ -32,6 +37,10 @@ DLLDSAPROJECT_API bool SetMaze(const int** data, int width, int height)
 		mazeData = data;
 		mazeWidth = width;
 		mazeHeight = height;
+
+		// Create Graph object
+		graph = new Graph(data, width, height, -1, -1, -1, -1); // Start and End will be nullptrs
+
 		return true;
 	}
 	//if the data is a nullptr or width or height are null, negative, or zero, return false
@@ -56,48 +65,45 @@ DLLDSAPROJECT_API int** GetMaze(int& width, int& height)
 	}
 }
 
-int positions[10][2] =
-{
-	{ 1, 5 },
-	{ 3, 2 },
-	{ 7, 3 },
-	{ 6, 9 },
-	{ 2, 5 },
-	{ 4, 1 },
-	{ 3, 3 },
-	{ 7, 8 },
-	{ 8, 4 },
-	{ 1, 6 }
-};
-int currentPosIndex = -1;
 DLLDSAPROJECT_API bool GetNextPosition(int& xPos, int& yPos)
 {
-	//If the current position is one away from the size of the positions array (or any amount greater) then there are no more steps to take.
-	//The function will in that case return false
-	if (currentPosIndex + 1 >= sizeof(positions))
-	{
+	// If we have run the pathfinder algorithm
+	if (path != nullptr) {
+		//If the current position is one away from the size of the positions array (or any amount greater) then there are no more steps to take.
+		//The function will in that case return false
+		if (currentPathIndex + 1 >= *pathLength)
+		{
+			return false;
+		}
+		//Otherwise, increase the current position index by one, set the x and y positions to the next position in the array and return true.
+		else
+		{
+			currentPathIndex++;
+			xPos = path[currentPathIndex][0];
+			yPos = path[currentPathIndex][1];
+			return true;
+		}
+	}
+	else {
+		// This shouldn't happen
 		return false;
 	}
-	//Otherwise, increase the current position index by one, set the x and y positions to the next position in the array and return true.
-	else
-	{
-		currentPosIndex++;
-		xPos = positions[currentPosIndex][0];
-		yPos = positions[currentPosIndex][1];
-		return true;
-	}
-
 }
 
 //Luke's Functions
-int startPos[] = { -1,-1 };
 DLLDSAPROJECT_API bool SetStart(int xpos, int ypos)
 {
 	//Check if the given values are valid. If so, set the new start position and return true.
-	if (xpos >= 0 && ypos >= 0)
+	if (xpos >= 0 && xpos < mazeWidth && ypos >= 0 && ypos < mazeHeight)
 	{
-		startPos[0] = xpos;
-		startPos[1] = ypos;
+		graph->SetStart(xpos, ypos);
+		// Because we changed the start, we have to calculate the path again
+		// If there's also an end (obviously we know there's a start)
+		int temp1, temp2 = 0;
+		if (graph->GetEnd(temp1, temp2)) {
+			path = graph->FindPath(*pathLength);
+			currentPathIndex = -1;
+		}
 		return true;
 	}
 	//Otherwise, return false.
@@ -109,28 +115,23 @@ DLLDSAPROJECT_API bool SetStart(int xpos, int ypos)
 
 DLLDSAPROJECT_API bool GetStart(int& xpos, int& ypos)
 {
-	//If the starting x and y positions have been set as valid values, set the given positions to match and return true.
-	if (startPos[0] >= 0 && startPos[1] >= 0)
-	{
-		xpos = startPos[0];
-		ypos = startPos[1];
-		return true;
-	}
-	//Otherwise, return false and do not set the given positions to anything.
-	else
-	{
-		return false;
-	}
+	// If there is a start, it'll change the values, otherwise it returns false
+	return graph->GetStart(xpos, ypos);
 }
 
-int endPos[] = { -1,-1 };
 DLLDSAPROJECT_API bool SetEnd(int xpos, int ypos)
 {
 	//Check if the given values are valid. If so, set the new end position and return true.
-	if (xpos >= 0 && ypos >= 0)
+	if (xpos >= 0 && xpos < mazeWidth && ypos >= 0 && ypos < mazeHeight)
 	{
-		endPos[0] = xpos;
-		endPos[1] = ypos;
+		graph->SetEnd(xpos, ypos);
+		// Because we changed the end, we have to calculate the path again
+		// If there's also a start (obviously we know there's an end)
+		int temp1, temp2 = 0;
+		if (graph->GetStart(temp1, temp2)) {
+			path = graph->FindPath(*pathLength);
+			currentPathIndex = -1;
+		}
 		return true;
 	}
 	//Otherwise, return false.
@@ -142,18 +143,8 @@ DLLDSAPROJECT_API bool SetEnd(int xpos, int ypos)
 
 DLLDSAPROJECT_API bool GetEnd(int& xpos, int& ypos)
 {
-	//If the starting x and y positions have been set as valid values, set the given positions to match and return true.
-	if (startPos[0] >= 0 && startPos[1] >= 0)
-	{
-		xpos = endPos[0];
-		ypos = endPos[1];
-		return true;
-	}
-	//Otherwise, return false and do not set the given positions to anything.
-	else
-	{
-		return false;
-	}
+	// If there is an end, it'll change the values, otherwise it returns false
+	return graph->GetEnd(xpos, ypos);
 }
 
 /// <summary>
@@ -162,8 +153,8 @@ DLLDSAPROJECT_API bool GetEnd(int& xpos, int& ypos)
 /// <returns></returns>
 DLLDSAPROJECT_API bool Restart(int xPos, int yPos) 
 {
-	//set currentPosIndex back to -1
-	currentPosIndex = -1;
+	//set currentPathIndex back to -1
+	currentPathIndex = -1;
 	//set the given x and y positions to Start (if GetStart returns false, stop and return false
 	if (!GetStart(xPos, yPos))
 	{
