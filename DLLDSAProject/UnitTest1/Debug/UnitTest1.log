@@ -1,6 +1,7 @@
-﻿     Creating library C:\Users\lukie\source\repos\DSAProject2\DLLDSAProject\Debug\UnitTest1.lib and object C:\Users\lukie\source\repos\DSAProject2\DLLDSAProject\Debug\UnitTest1.exp
+﻿  LINK : C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\UnitTest1.dll not found or not built by the last incremental link; performing full link
+     Creating library C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\UnitTest1.lib and object C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\UnitTest1.exp
 UnitTest1.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) void __cdecl SetMaze(int const * *,int,int)" (__imp_?SetMaze@@YAXPAPBHHH@Z) referenced in function "public: void __thiscall UnitTest1::UnitTest1::TestMazeDataFuncs(void)" (?TestMazeDataFuncs@UnitTest1@1@QAEXXZ)
 UnitTest1.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) void __cdecl GetNextPosition(int &,int &)" (__imp_?GetNextPosition@@YAXAAH0@Z) referenced in function "public: void __thiscall UnitTest1::UnitTest1::TestNextPosition(void)" (?TestNextPosition@UnitTest1@1@QAEXXZ)
 UnitTest1.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) void __cdecl SetEnd(int,int)" (__imp_?SetEnd@@YAXHH@Z) referenced in function "public: void __thiscall UnitTest1::UnitTest1::TestEndPosFuncs(void)" (?TestEndPosFuncs@UnitTest1@1@QAEXXZ)
 UnitTest1.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) void __cdecl GetEnd(int &,int &)" (__imp_?GetEnd@@YAXAAH0@Z) referenced in function "public: void __thiscall UnitTest1::UnitTest1::TestEndPosFuncs(void)" (?TestEndPosFuncs@UnitTest1@1@QAEXXZ)
-C:\Users\lukie\source\repos\DSAProject2\DLLDSAProject\Debug\UnitTest1.dll : fatal error LNK1120: 4 unresolved externals
+C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\UnitTest1.dll : fatal error LNK1120: 4 unresolved externals

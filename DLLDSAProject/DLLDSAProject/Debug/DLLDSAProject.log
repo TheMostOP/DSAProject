@@ -1,2 +1,5 @@
-﻿  DLLDSAProject.cpp
-  DLLDSAProject.vcxproj -> C:\Users\lukie\source\repos\DSAProject2\DLLDSAProject\Debug\SampleDLL.dll
+﻿  Graph.cpp
+  Vertex.cpp
+  Generating Code...
+     Creating library C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\SampleDLL.lib and object C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\SampleDLL.exp
+  DLLDSAProject.vcxproj -> C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\SampleDLL.dll

@@ -9,6 +9,7 @@
 #else
 #define DLLDSAPROJECT_API __declspec(dllimport)
 #endif
+#include "Graph.h"
 
 // This class is exported from the dll
 class DLLDSAPROJECT_API CDLLDSAProject {
