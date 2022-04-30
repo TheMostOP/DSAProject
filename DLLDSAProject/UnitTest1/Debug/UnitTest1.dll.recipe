@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\SampleDLL.dll</FullPath>
+      <FullPath>C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\DLLDSAProject.dll</FullPath>
     </ProjectOutput>
     <ProjectOutput>
       <FullPath>C:\Users\42sat\Documents\Code Projects\DSAProject\DLLDSAProject\Debug\UnitTest1.dll</FullPath>
