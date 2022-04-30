@@ -14,22 +14,22 @@ const int** mazeData = nullptr;
 int mazeWidth, mazeHeight = 0;
 
 // This is an example of an exported variable
-DLLDSAPROJECT_API int nDLLDSAProject = 0;
+extern "C" DLLDSAPROJECT_API int nDLLDSAProject = 0;
 
 // This is an example of an exported function.
-DLLDSAPROJECT_API int fnDLLDSAProject(void)
+extern "C" DLLDSAPROJECT_API int fnDLLDSAProject(void)
 {
 	return 0;
 }
 
 // Connor's functions
 const char* teamName = "Luke and Connor";
-DLLDSAPROJECT_API char* GetTeam()
+extern "C" DLLDSAPROJECT_API char* GetTeam()
 {
 	return (char*)teamName;
 }
 
-DLLDSAPROJECT_API bool SetMaze(const int** data, int width, int height)
+extern "C" DLLDSAPROJECT_API bool SetMaze(const int** data, int width, int height)
 {
 	//if the data is not a nullptr and the width and height are both greater than zero, set the maze and return true
 	if (data != nullptr && width > 0 && height > 0)
@@ -50,7 +50,7 @@ DLLDSAPROJECT_API bool SetMaze(const int** data, int width, int height)
 	}
 }
 
-DLLDSAPROJECT_API int** GetMaze(int& width, int& height)
+extern "C" DLLDSAPROJECT_API int** GetMaze(int& width, int& height)
 {
 	//If the mazeData hasn't been set and is still nullptr, return nullptr
 	if (mazeData == nullptr)
@@ -65,7 +65,7 @@ DLLDSAPROJECT_API int** GetMaze(int& width, int& height)
 	}
 }
 
-DLLDSAPROJECT_API bool GetNextPosition(int& xPos, int& yPos)
+extern "C" DLLDSAPROJECT_API bool GetNextPosition(int& xPos, int& yPos)
 {
 	// If we have run the pathfinder algorithm
 	if (path != nullptr) {
@@ -91,7 +91,7 @@ DLLDSAPROJECT_API bool GetNextPosition(int& xPos, int& yPos)
 }
 
 //Luke's Functions
-DLLDSAPROJECT_API bool SetStart(int xpos, int ypos)
+extern "C" DLLDSAPROJECT_API bool SetStart(int xpos, int ypos)
 {
 	//Check if the given values are valid. If so, set the new start position and return true.
 	if (xpos >= 0 && xpos < mazeWidth && ypos >= 0 && ypos < mazeHeight)
@@ -113,13 +113,13 @@ DLLDSAPROJECT_API bool SetStart(int xpos, int ypos)
 	}
 }
 
-DLLDSAPROJECT_API bool GetStart(int& xpos, int& ypos)
+extern "C" DLLDSAPROJECT_API bool GetStart(int& xpos, int& ypos)
 {
 	// If there is a start, it'll change the values, otherwise it returns false
 	return graph->GetStart(xpos, ypos);
 }
 
-DLLDSAPROJECT_API bool SetEnd(int xpos, int ypos)
+extern "C" DLLDSAPROJECT_API bool SetEnd(int xpos, int ypos)
 {
 	//Check if the given values are valid. If so, set the new end position and return true.
 	if (xpos >= 0 && xpos < mazeWidth && ypos >= 0 && ypos < mazeHeight)
@@ -141,7 +141,7 @@ DLLDSAPROJECT_API bool SetEnd(int xpos, int ypos)
 	}
 }
 
-DLLDSAPROJECT_API bool GetEnd(int& xpos, int& ypos)
+extern "C" DLLDSAPROJECT_API bool GetEnd(int& xpos, int& ypos)
 {
 	// If there is an end, it'll change the values, otherwise it returns false
 	return graph->GetEnd(xpos, ypos);
@@ -151,7 +151,7 @@ DLLDSAPROJECT_API bool GetEnd(int& xpos, int& ypos)
 ///  this function will make the player start back at their start location and step through each part of the path to the end again.
 /// </summary>
 /// <returns></returns>
-DLLDSAPROJECT_API bool Restart(int xPos, int yPos) 
+extern "C" DLLDSAPROJECT_API bool Restart(int xPos, int yPos)
 {
 	//set currentPathIndex back to -1
 	currentPathIndex = -1;
@@ -167,7 +167,7 @@ DLLDSAPROJECT_API bool Restart(int xPos, int yPos)
 }
 
 // This is the constructor of a class that has been exported.
-CDLLDSAProject::CDLLDSAProject()
+extern "C" CDLLDSAProject::CDLLDSAProject()
 {
 	return;
 }
